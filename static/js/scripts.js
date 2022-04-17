@@ -30,7 +30,7 @@ function render(data) {
     div.innerHTML = output;
 }
 
-let html = '\
+let htmls = '\
 {{#movies}}\
     <div class="col-md-4 product-men">\
         <div class="product-shoe-info editContent text-center mt-lg-4">\
@@ -57,3 +57,23 @@ let html = '\
         </div>\
     </div>\
 {{/movies}}'
+
+let html = '\
+<table>\
+{{#movies}}\
+    <tr>\
+        <td>{{title}}</td>\
+        <td>{{count}}</td>\
+        <td>{{date}}</td>\
+        <td>{{distance}}</td>\
+    </tr>\
+{{/movies}}\
+</table>\
+'
+// <table>
+//     {% for row in table_list %}
+//         <tr>
+//             <td>{{ row.title }}</td>
+//         </tr>
+//     {% endfor %}
+// </table>

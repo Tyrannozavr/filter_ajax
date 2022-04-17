@@ -29,11 +29,11 @@ class JsonFilterMoviesView(ListView):
             queryset = Table.objects.extra(where=[f'{column} = {value}'])
         elif condition == '4':
             queryset = Table.objects.extra(where=[f'{column} LIKE "%{value}%"'])
-        return queryset.distinct().values('title')
+        return queryset.distinct().values('title', 'date', 'count', 'distance')
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        paginator = Paginator(queryset, 10)
+        paginator = Paginator(queryset, self.paginate_by)
         page = request.GET.get('page')
         try:
             queryset = paginator.page(page)
@@ -42,4 +42,6 @@ class JsonFilterMoviesView(ListView):
         except EmptyPage:
             queryset = paginator.page(paginator.num_pages)
         queryset = list(queryset)
+        # queryset = list(self.get_queryset())
+        # print(queryset)
         return JsonResponse({"movies": queryset, 'page': page}, safe=False)
