@@ -3,12 +3,13 @@ from django.views.generic import ListView
 from django.http import JsonResponse
 from .models import Table, Genre
 from time import time
+from django.core.paginator import Paginator
+from django.core.paginator import PageNotAnInteger, EmptyPage
 
 def index(request):
     now = time()
     genres = Genre.objects.all()
     return render(request, 'filter/index.html', {'genres': genres, 'now': now})
-
 
 class JsonFilterMoviesView(ListView):
     model = Table
@@ -21,17 +22,24 @@ class JsonFilterMoviesView(ListView):
         value = self.request.GET.get('value')
         queryset = Table.objects.all()
         if condition == '1':
-            queryset = Table.objects.all().extra(where=[f'{column} > {value}']).distinct().values('title')
+            queryset = Table.objects.all().extra(where=[f'{column} > {value}'])
         elif condition == '2':
-            queryset = Table.objects.extra(where=[f'{column} < {value}']).distinct().values('title')
+            queryset = Table.objects.extra(where=[f'{column} < {value}'])
         elif condition == '3':
-            queryset = Table.objects.extra(where=[f'{column} = {value}']).distinct().values('title')
+            queryset = Table.objects.extra(where=[f'{column} = {value}'])
         elif condition == '4':
-            queryset = Table.objects.extra(where=[f'{column} LIKE "%{value}%"']).distinct().values('title')
-        return queryset
+            queryset = Table.objects.extra(where=[f'{column} LIKE "%{value}%"'])
+        return queryset.distinct().values('title')
 
     def get(self, request, *args, **kwargs):
-        queryset = list(self.get_queryset())
-        return JsonResponse({"movies": queryset}, safe=False)
-
-
+        queryset = self.get_queryset()
+        paginator = Paginator(queryset, 10)
+        page = request.GET.get('page')
+        try:
+            queryset = paginator.page(page)
+        except PageNotAnInteger:
+            queryset = paginator.page(1)
+        except EmptyPage:
+            queryset = paginator.page(paginator.num_pages)
+        queryset = list(queryset)
+        return JsonResponse({"movies": queryset, 'page': page}, safe=False)
