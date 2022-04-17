@@ -21,30 +21,14 @@ class JsonFilterMoviesView(ListView):
         value = self.request.GET.get('value')
         queryset = Table.objects.all()
         if condition == '1':
-            queryset = Table.objects.raw(f'''
-                SELECT * FROM table_table
-                WHERE {column} > {value};
-                ''').all
+            queryset = Table.objects.all().extra(where=[f'{column} > {value}']).distinct().values('title')
         elif condition == '2':
-
-            queryset = Table.objects.raw(f'''-- 
-        --                 SELECT * FROM table_table
-        --         #         WHERE {column} < {value};
-                        ''')
+            queryset = Table.objects.extra(where=[f'{column} < {value}']).distinct().values('title')
         elif condition == '3':
-            f = Table.objects.raw(f'''
-                        SELECT * FROM table_table
-                        WHERE {column} = {value};
-                        ''')
+            queryset = Table.objects.extra(where=[f'{column} = {value}']).distinct().values('title')
         elif condition == '4':
-            queryset = Table.objects.raw(f'''
-                    SELECT * FROM table_table
-                    WHERE {column} LIKE "%{value}%";''')
-        print(queryset)
-        queryset = Table.objects.all().distinct().values("title")
-        print(queryset)
+            queryset = Table.objects.extra(where=[f'{column} LIKE "%{value}%"']).distinct().values('title')
         return queryset
-        # return queryset.distinct().values('title')
 
     def get(self, request, *args, **kwargs):
         queryset = list(self.get_queryset())
