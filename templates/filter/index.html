@@ -6,33 +6,41 @@
     <title>Title</title>
 </head>
 <body>
-<form action="{% url 'json_filter' %}" method="get" name="filter">
-    <div class="left-side my-4">
-        <h3 class="sear-head editContent">Жанры</h3>
-        <ul class="w3layouts-box-list">
-            {% for genre in genres %}
-                <li class="editContent">
-                    <input type="checkbox" class="checked" name="genre" value="{{ genre.id }}">
-                    <span class="span editContent">{{ genre.name }}</span>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <!-- // preference -->
-    <!-- discounts -->
 
-    <div class="left-side">
-        <h3 class="sear-head editContent">Год</h3>
-        <ul class="w3layouts-box-list">
-            {% for movie in view.get_years %}
-                <li class="editContent">
-                    <input type="checkbox" class="checked" name="year" value="{{ movie.year }}">
-                    <span class="span editContent">{{ movie.year }}</span>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <button type="submit">Найти</button>
+<form action="{% url 'json_filter' %}" method="get" name="filter">
+        <p>
+    <label for="id_title">column:</label>
+    <select name="title" id="id_title">
+  <option value="">---------</option>
+
+  <option value="1">title</option>
+
+  <option value="2" selected>count</option>
+
+  <option value="3">distance</option>
+
+</select></p>
+    <p>
+    <label for="id_count">condition:</label>
+    <select name="count" id="id_count">
+  <option value="">---------</option>
+
+  <option value="1">&gt;</option>
+
+  <option value="2">&lt;</option>
+
+  <option value="3" selected>==</option>
+
+  <option value="4">in</option>
+</select>
+  </p>
+
+  <p>
+    <label for="id_distance">Value:</label>
+    <input type="text" name="value" id="id_distance">
+
+  </p>
+        <button type="submit">Найти</button>
 </form>
 
 {% block movie %}
