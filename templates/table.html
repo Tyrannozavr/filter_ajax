@@ -1,0 +1,33 @@
+{% load static %}
+<table>
+    {% for row in table_list %}
+        <tr>
+            <td>{{ row.title }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<h1>now {{ now }}</h1>
+{% block pagination %}
+    <input type="submit" id="update" value="update" data-type="2">
+    {% if is_paginated %}
+        <div class = "pagination">
+            <span class = "page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{page_obj.previous_page_number }}">Предыдущая</a>
+                {% endif %}
+                <span class="page-current">
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+                {% if page_obj.has_next %}
+{#                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">Следующая</a>#}
+                    <button class = "button" data-type="{{ page_obj.next_page_number }}">Следующий </button>
+  {#                  <a href="{% static 'js/my_ajax.js'%}?page={{ page_obj.next_page_number }}">Следующая</a>#}
+                {% endif %}
+            </span>
+        </div>
+<script src="{% static 'js/table.js' %}?{{ now }}"></script>
+{% endif %}
+{% endblock %}
+{#<span> <input type="submit" class="button" value="предыдущая" data-type="prev"> </span>#}
+{#<span> <input type="submit" class="button" value="следующая" data-type="nex"> </span>#}
+
