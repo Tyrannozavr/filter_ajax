@@ -21,7 +21,9 @@ class JsonFilterMoviesView(ListView):
         condition = self.request.GET.get('count')
         value = self.request.GET.get('value')
         queryset = Table.objects.all()
-        if condition == '1':
+        if column == '' or condition == '' or value == '':
+            pass
+        elif condition == '1':
             queryset = Table.objects.all().extra(where=[f'{column} > {value}'])
         elif condition == '2':
             queryset = Table.objects.extra(where=[f'{column} < {value}'])
