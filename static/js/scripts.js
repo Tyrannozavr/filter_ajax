@@ -60,6 +60,12 @@ let htmls = '\
 
 let html = '\
 <table>\
+<tr>\
+<td>title</td>\
+<td>count</td>\
+<td>date</td>\
+<td>distance</td>\
+</tr>\
 {{#movies}}\
     <tr>\
         <td>{{title}}</td>\
